@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Handles collision detection for the player avatar.
+// Handles non-enemy collision detection for the player avatar.
 public class CollisionDetection : MonoBehaviour
 {
     private PlayerController playerController;
@@ -52,10 +52,14 @@ public class CollisionDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Detects hitting the goal box.
+        // Detects hitting the goal box and killzone
         if (other.gameObject.name == "Goal")
         {
             mainController.GameWin();
+        }
+        if (other.gameObject.tag == "killzone")
+        {
+            mainController.GameOver();
         }
     }
 }

@@ -18,16 +18,19 @@ public class PlayerController : MonoBehaviour
 
     public MainController mainController;
 
+    // Damage cooldown and animation
+    public Renderer rend;
     public bool grounded;
     public bool hitCooldown;
     public static bool isPlaying;
 
-    private IEnumerator cooldownCoroutine;
 
     void Start()
     {
         playerLivesRemain = playerLifeMax;
         playerRb = GetComponent<Rigidbody>();
+        rend = GetComponent<Renderer>();
+        rend.enabled = true;
         grounded = false;
         isPlaying = true;
         hitCooldown = false;
@@ -74,18 +77,21 @@ public class PlayerController : MonoBehaviour
 
     public void HazardCollide()
     {
-        //Damages player, allows a jump to escape, sets cooldown timer before player can be hit again
-        PlayerDamage();
-        hitCooldown = true;
-        grounded = true;
-        cooldownCoroutine = HitCooldown(cooldownTime);
-        StartCoroutine(cooldownCoroutine);
+        if (!hitCooldown)
+        {
+            PlayerDamage();
+            StartCoroutine(HitCooldown(cooldownTime));
+        }
+
     }
 
+    // takes one life from player, runs GameOver if lives drop to zero.
     void PlayerDamage()
     {
         if (isPlaying)
         {
+            hitCooldown = true;
+            grounded = true;
             playerLivesRemain--;
             if (playerLivesRemain <= 0)
             {
@@ -94,12 +100,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Starts blinking animation for cooldown duration, stops blinking, ensures player is visible, then turns itself off.
     IEnumerator HitCooldown(int w)
     {
-        while (true)
+        while (hitCooldown == true)
         {
+            InvokeRepeating("Blink", 0, 0.10f);            
             yield return new WaitForSeconds(w);
+            CancelInvoke("Blink");
+            rend.enabled = true;
             hitCooldown = false;
         }
     }
+
+    // Blinking animation for invincibility frames
+    void Blink()
+    {
+        if (rend.enabled == true)
+        {
+            rend.enabled = false;
+        }
+        else
+        {
+            rend.enabled = true;
+        }
+    }
+
 }
