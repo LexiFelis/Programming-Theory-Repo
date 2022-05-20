@@ -8,6 +8,7 @@ public class CollisionDetection : MonoBehaviour
     private PlayerController playerController;
     //public GameObject mainController;
     public MainController mainController;
+    public Enemy enemyScript;
 
     private void Awake()
     {
@@ -18,11 +19,16 @@ public class CollisionDetection : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+
+
         // Detects collision with hazards/enemies and initial collision with the ground
         if (other.gameObject.tag == "hazard")
         {
+
+
             if (!playerController.hitCooldown)
             {
+                
                 playerController.HazardCollide();
             }
         }

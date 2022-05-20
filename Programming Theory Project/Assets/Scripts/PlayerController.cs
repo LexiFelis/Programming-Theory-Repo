@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
         if (!hitCooldown)
         {
             PlayerDamage();
+            playerRb.AddForce(Vector3.up * 5, ForceMode.Impulse);
             StartCoroutine(HitCooldown(cooldownTime));
         }
 

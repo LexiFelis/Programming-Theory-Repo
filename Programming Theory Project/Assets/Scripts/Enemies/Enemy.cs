@@ -9,6 +9,22 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected bool canDie;
     [SerializeField] protected float enemyMoveTime = 4f;
 
+    // For enemies that have initial delay
+    protected bool hasDelay = false;
+    private float _delayTime = 0;
+    protected float delayTime
+    {
+        get => _delayTime;
+        set
+        {
+            if ((value >= 0) && (value < enemyMoveTime*2))
+            {
+                _delayTime = value;
+            }
+            else { Debug.LogError(gameObject.name + ": invalid delay time"); }
+        }
+    }
+
     // Vectors for enemies to move between, can be set in 3D space via editor.
     [SerializeField] protected GameObject pointA;
     protected Vector3 patrolA;
@@ -52,6 +68,10 @@ public abstract class Enemy : MonoBehaviour
     protected IEnumerator MoveTimer()
     {
         SetPatrolPath();
+        if (hasDelay == true)
+        {
+            yield return new WaitForSeconds(_delayTime);
+        }
 
         while (true)
         {
@@ -59,16 +79,16 @@ public abstract class Enemy : MonoBehaviour
             {
                 gameObject.transform.Rotate(patrolRotate);
             }
-            yield return StartCoroutine(MovePickup(transform, patrolA, patrolB, enemyMoveTime));
+            yield return StartCoroutine(MoveEnemy(transform, patrolA, patrolB, enemyMoveTime));
             if (doesRotate)
             {
                 gameObject.transform.Rotate(patrolRotate);
             }
-            yield return StartCoroutine(MovePickup(transform, patrolB, patrolA, enemyMoveTime));
+            yield return StartCoroutine(MoveEnemy(transform, patrolB, patrolA, enemyMoveTime));
         }
     }
 
-    protected IEnumerator MovePickup(Transform thisTransform, Vector3 startPos, Vector3 endPos, float time)
+    protected IEnumerator MoveEnemy(Transform thisTransform, Vector3 startPos, Vector3 endPos, float time)
     {
         var i = 0.0f;
         var rate = 1.0f / time;
@@ -91,6 +111,7 @@ public abstract class Enemy : MonoBehaviour
             }
             else
             {
+
                 playerController.HazardCollide();
             }
         }
@@ -105,7 +126,6 @@ public abstract class Enemy : MonoBehaviour
             if (Vector3.Angle(col.contacts[k].normal, validDirection) <= contactThreshold)
             {
                 gameObject.SetActive(false);
-                Debug.Log("Boop!");
             }
             else
             {
