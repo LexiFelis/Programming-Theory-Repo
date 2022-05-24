@@ -6,7 +6,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // These two will be privated eventually with get/set
-    public int playerLifeMax = 1;
+    public int playerLifeMax { get; private set; }
+
     public int playerLivesRemain;
 
     private float runSpeed = 20;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        playerLifeMax = 3;
         playerLivesRemain = playerLifeMax;
         playerRb = GetComponent<Rigidbody>();
         rend = GetComponent<Renderer>();
@@ -35,7 +37,6 @@ public class PlayerController : MonoBehaviour
         isPlaying = true;
         hitCooldown = false;
     }
-
 
     void Update()
     {
@@ -106,7 +107,7 @@ public class PlayerController : MonoBehaviour
     {
         while (hitCooldown == true)
         {
-            InvokeRepeating("Blink", 0, 0.10f);            
+            InvokeRepeating("Blink", 0, 0.10f);
             yield return new WaitForSeconds(w);
             CancelInvoke("Blink");
             rend.enabled = true;
@@ -126,5 +127,4 @@ public class PlayerController : MonoBehaviour
             rend.enabled = true;
         }
     }
-
 }

@@ -8,7 +8,9 @@ public class CollisionDetection : MonoBehaviour
     private PlayerController playerController;
     //public GameObject mainController;
     public MainController mainController;
+
     public Enemy enemyScript;
+   
 
     private void Awake()
     {
@@ -19,22 +21,23 @@ public class CollisionDetection : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-
-
-        // Detects collision with hazards/enemies and initial collision with the ground
+        // Detects collision with hazards and normal enemies and initial collision with the ground
         if (other.gameObject.tag == "hazard")
         {
-
-
             if (!playerController.hitCooldown)
-            {
-                
+            {                
                 playerController.HazardCollide();
             }
         }
         if (other.gameObject.tag == "ground")
         {
             playerController.grounded = true;
+        }
+        // If enemy, run Directional collision detection.
+        if (other.gameObject.tag == "enemy")
+        {
+            enemyScript = other.gameObject.GetComponent<Enemy>();
+            DirectionalHit(other);   
         }
     }
 
@@ -55,6 +58,58 @@ public class CollisionDetection : MonoBehaviour
             playerController.grounded = false;
         }
     }
+
+    // Checks for angle of collision from player
+    private void DirectionalHit(Collision col)
+    {
+        for (int k = 0; k < col.contacts.Length; k++)
+        {
+            // if player hits danger zone
+            if (Vector3.Angle(col.contacts[k].normal, enemyScript.validDirection) <= enemyScript.contactThreshold)
+            {
+                DangerZoneHit(col, enemyScript.directionInverse, enemyScript.canDie);
+            }
+            // if player hits anywhere else
+            else
+            {
+                BodyHit(col, enemyScript.directionInverse, enemyScript.canDie);
+            }
+        }
+    }
+
+    // Script for hitting danger zone
+    private void DangerZoneHit(Collision col, bool dInvert, bool cDie)
+    {
+        if (dInvert)
+        {
+            playerController.HazardCollide();
+        }
+        else
+        {
+            if (cDie)
+            {
+                col.gameObject.SetActive(false);
+            }
+        }
+    }
+    
+    // Script for hitting anywhere other than danger zone
+    private void BodyHit(Collision col, bool dInvert, bool cDie)
+    {
+        if (!dInvert)
+        {
+            playerController.HazardCollide();
+        }
+        else
+        {
+            if (cDie)
+            {
+                col.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    // Triggers begin here
 
     private void OnTriggerEnter(Collider other)
     {
