@@ -8,13 +8,38 @@ using UnityEngine;
 
 public class Knife : Enemy
 {
+    public override bool canDie
+    {
+        get { return m_canDie; }
+        protected set { m_canDie = value; }
+    }
+
+    public override bool directionInverse
+    {
+        get { return m_directionInverse; }
+        protected set { m_directionInverse = value; }
+    }
+
+    public override float contactThreshold
+    {
+        get { return m_contactThreshold; }
+        protected set { m_contactThreshold = value; }
+    }
+
+    public override Vector3 validDirection
+    {
+        get { return m_validDirection; }
+        protected set { m_validDirection = value; }
+    }
+
     protected override void Start()
     {
-        validDirection = Vector3.down; // side of Player we are checking (bottom)
+        canDie = true;
+        validDirection = Vector3.up; // side of enemy we are checking (top)
         contactThreshold = 30; // Acceptable difference in degrees
+        directionInverse = false;
         doesRotate = true;
         patrolRotate = new Vector3(180, 0, 0);
-        canDie = true;
         base.Start();
     }
 }

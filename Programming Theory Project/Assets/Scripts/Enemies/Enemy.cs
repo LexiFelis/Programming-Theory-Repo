@@ -6,7 +6,7 @@ using UnityEngine;
 // All enemies: patrol between two points, collides with player for an effect
 public abstract class Enemy : MonoBehaviour
 {
-    [SerializeField] protected bool canDie;
+    // Start of enemy movement variables.
     [SerializeField] protected float enemyMoveTime = 4f;
 
     // For enemies that have initial delay
@@ -17,7 +17,7 @@ public abstract class Enemy : MonoBehaviour
         get => _delayTime;
         set
         {
-            if ((value >= 0) && (value < enemyMoveTime*2))
+            if ((value >= 0) && (value < enemyMoveTime * 2))
             {
                 _delayTime = value;
             }
@@ -35,20 +35,27 @@ public abstract class Enemy : MonoBehaviour
     protected bool doesRotate;
     protected Vector3 patrolRotate;
 
-    // for directional collision detection
-    protected float contactThreshold;
-    protected Vector3 validDirection;
+    // for directional collision detection, mandatory for all children
+    protected bool m_canDie;
+    public abstract bool canDie { get; protected set; }
+    protected bool m_directionInverse;
+    public abstract bool directionInverse { get; protected set; }
+    protected float m_contactThreshold;
+    public abstract float contactThreshold { get; protected set; }
+    protected Vector3 m_validDirection;
+    public abstract Vector3 validDirection { get; protected set; }
 
-    // for accessing player script
-    protected GameObject playerObject;
-    protected PlayerController playerController;
+    // for accessing player script (may be used for enemies that chase)
+    //protected GameObject playerObject;
+    //protected PlayerController playerController;
 
     protected virtual void Start()
     {
-        PlayerSet();
+        //PlayerSet();
         StartCoroutine(MoveTimer());
     }
 
+    // Sets the patrol points then deactivates the empty gameobjects
     protected void SetPatrolPath()
     {
         patrolA = pointA.transform.position;
@@ -57,11 +64,11 @@ public abstract class Enemy : MonoBehaviour
         pointB.SetActive(false);
     }
 
-    protected void PlayerSet()
-    {
-        playerObject = GameObject.Find("Player");
-        playerController = playerObject.GetComponent<PlayerController>();
-    }
+    //protected void PlayerSet()
+    //{
+    //    playerObject = GameObject.Find("Player");
+    //    playerController = playerObject.GetComponent<PlayerController>();
+    //}
 
     // Similar coroutine as the pickup animation, could possibly be merged into a single class that handles moving obstacles/enemies?
     // if(doesRotate) exists for patrolling enemies that turn around, like the knife.
@@ -97,40 +104,6 @@ public abstract class Enemy : MonoBehaviour
             i += Time.deltaTime * rate;
             thisTransform.position = Vector3.Lerp(startPos, endPos, i);
             yield return null;
-        }
-    }
-
-    // If enemy can die, run Directional collision detection. If not, hurt player.
-    protected virtual void OnCollisionEnter(Collision col)
-    {
-        if (col.gameObject.name == "Player")
-        {
-            if (canDie)
-            {
-                DirectionalHit(col);
-            }
-            else
-            {
-
-                playerController.HazardCollide();
-            }
-        }
-    }
-
-    // Checks for angle of collision from player, then either damages or gets deactivated
-    protected void DirectionalHit(Collision col)
-    {
-        for (int k = 0; k < col.contacts.Length; k++)
-        {
-            // checks if colliding with bottom of player, then deactivates itself
-            if (Vector3.Angle(col.contacts[k].normal, validDirection) <= contactThreshold)
-            {
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                playerController.HazardCollide();
-            }
         }
     }
 }

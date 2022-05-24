@@ -20,14 +20,10 @@ public class EnergyDrink : Pickup
     {
         playerController = player.GetComponent<PlayerController>();
 
-        if(playerController.playerLivesRemain <= 3)
+        if(playerController.playerLivesRemain < playerController.playerLifeMax)
         {
             playerController.playerLivesRemain++;
             gameObject.SetActive(false);
         }
-        else
-        {
-            gameObject.SetActive(false);
-        }    
     }
 }

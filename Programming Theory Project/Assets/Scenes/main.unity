@@ -4402,6 +4402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainController: {fileID: 1912920471}
+  enemyScript: {fileID: 0}
 --- !u!1001 &1615610216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5697,6 +5698,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4206591211991690, guid: 1c422d16ed4845d419317359040e4215, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 95531830751938308, guid: 1c422d16ed4845d419317359040e4215, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
