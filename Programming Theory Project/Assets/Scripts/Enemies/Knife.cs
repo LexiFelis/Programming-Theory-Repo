@@ -34,12 +34,18 @@ public class Knife : Enemy
 
     protected override void Start()
     {
+        InitialiseKnife();
+        base.Start();
+    }
+
+    private void InitialiseKnife()
+    {
+        enemyObj = gameObject;
         canDie = true;
         validDirection = Vector3.up; // side of enemy we are checking (top)
         contactThreshold = 30; // Acceptable difference in degrees
         directionInverse = false;
-        doesRotate = true;
         patrolRotate = new Vector3(180, 0, 0);
-        base.Start();
+        doesRotate = true;
     }
 }

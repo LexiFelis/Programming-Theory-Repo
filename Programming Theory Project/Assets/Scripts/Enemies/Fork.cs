@@ -33,6 +33,13 @@ public class Fork : Enemy
 
     protected override void Start()
     {
+        InitialiseFork();
+        base.Start();
+    }
+
+    private void InitialiseFork()
+    {
+        enemyObj = gameObject;
         canDie = false;
         validDirection = Vector3.down; // side of enemy we are checking (top)
         contactThreshold = 30; // Acceptable difference in degrees
@@ -40,6 +47,5 @@ public class Fork : Enemy
         hasDelay = true;
         delayTime = delayBy;
         doesRotate = false;
-        base.Start();
     }
 }

@@ -7,44 +7,56 @@ public abstract class Pickup : MonoBehaviour
 {
     protected GameObject player;
     protected PlayerController playerController;
-    
-    protected int rotationSpeed = 60;
-    protected float floatTime = 3f;
-    protected float floatPauseTime = 1f;
-    protected float floatMax = 0.5f;
+
+    // For giving CoroutineController the gameobject transform info.
+    private GameObject _pickUp;
+    public GameObject pickUp
+    {
+        get { return _pickUp; }
+        protected set { _pickUp = value; }
+    }
+
+    // For accessing base coroutine script
+    [SerializeField] protected GameObject coControl;
+    protected CoroutineController coControlScript;
+
+    // variables for coroutine controller
     protected Vector3 pickupStartPos;
     protected Vector3 pickupEndPos;
 
-    // Found great way to move object back and forth, thanks MD_Reptile for finding it on the Unity forums
-    // Was tempted to install a tweening plugin but I'd prefer to stick to the vanilla Unity tools for this exercise
+    // baked in variables for coroutine controller
+    protected int rotationSpeed = 60;
+    protected float floatTime = 3f;
+    protected bool doesFloat = true;
+    protected float floatPauseTime = 1f;
+    protected float floatMax = 0.5f;
+
+    // baked in variables for coroutine controller that don't apply to pickups.
+    private bool delay = false;
+    private float delayTime = 0f;
+    private bool doesRotate = false;
+    protected Vector3 rotateBlank;
 
 
-    protected IEnumerator MoveTimer()
+    protected virtual void Start()
     {
-        
+        InitialiseRoute();
+        StartCoroutine(coControlScript.MoveTimer(pickUp, delay, delayTime, doesFloat, floatPauseTime, doesRotate, rotateBlank, pickupStartPos, pickupEndPos, floatTime));
+    }
+
+    protected void InitialiseRoute()
+    {
+        coControl = GameObject.Find("CoroutineController");
+        coControlScript = coControl.gameObject.GetComponent<CoroutineController>();
         pickupStartPos = transform.position;
         pickupEndPos = pickupStartPos;
         pickupEndPos.y += floatMax;
-
-        while (true)
-        {
-            yield return StartCoroutine(MovePickup(transform, pickupEndPos, pickupStartPos, floatTime));
-            yield return new WaitForSeconds(floatPauseTime);
-            yield return StartCoroutine(MovePickup(transform, pickupStartPos, pickupEndPos, floatTime));
-            yield return new WaitForSeconds(floatPauseTime);
-        }
     }
 
-    protected IEnumerator MovePickup(Transform thisTransform, Vector3 startPos, Vector3 endPos, float time)
+    // Slowly rotates the pickup
+    protected virtual void Update()
     {
-        var i = 0.0f;
-        var rate = 1.0f / time;
-        while (i < 1.0f)
-        {
-            i += Time.deltaTime * rate;
-            thisTransform.position = Vector3.Lerp(startPos, endPos, i);
-            yield return null;
-        }
+        PickupRotation();
     }
 
     protected virtual void PickupRotation()
@@ -52,8 +64,7 @@ public abstract class Pickup : MonoBehaviour
         transform.Rotate(-Vector3.up * rotationSpeed * Time.deltaTime);
     }
 
-    // Hopefully this will work for polymorphism
-
+    // abstract method for handling effects on pickup
     protected abstract void PowerUp();
 
     protected void OnTriggerEnter(Collider other)
