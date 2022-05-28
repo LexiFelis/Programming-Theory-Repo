@@ -5,7 +5,6 @@ using UnityEngine;
 // For controlling the player character and tracking lives.
 public class PlayerController : MonoBehaviour
 {
-    // These two will be privated eventually with get/set
     public int playerLifeMax { get; private set; }
 
     public int playerLivesRemain;
@@ -25,6 +24,8 @@ public class PlayerController : MonoBehaviour
     public bool hitCooldown;
     public static bool isPlaying;
 
+    [SerializeField] private ParticleSystem invPart;
+    [SerializeField] private GameObject invAura;
 
     void Start()
     {
@@ -36,7 +37,8 @@ public class PlayerController : MonoBehaviour
         grounded = false;
         isPlaying = true;
         hitCooldown = false;
-    }
+        invAura.SetActive(false);
+       }
 
     void Update()
     {
@@ -115,7 +117,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Blinking animation for invincibility frames
+    // Blinking animation for damage frames
     void Blink()
     {
         if (rend.enabled == true)
@@ -126,5 +128,27 @@ public class PlayerController : MonoBehaviour
         {
             rend.enabled = true;
         }
+    }
+
+    // Method to start coroutine is needed in here as the pickup disables itself, stopping the coroutine.
+    public void InvincibilityTrigger(float invTime)
+    {
+        StartCoroutine(Invincibility(invTime));
+    }
+
+    // Effectively a fancy hitCooldown with particle effect and aura.
+    private IEnumerator Invincibility(float invTime)
+    {
+        hitCooldown = true;
+        invAura.SetActive(true);
+        invPart.Play();
+
+        yield return new WaitForSeconds(invTime);
+
+        invPart.Stop();
+        invAura.SetActive(false);
+        hitCooldown = false;
+
+        yield return null;
     }
 }
