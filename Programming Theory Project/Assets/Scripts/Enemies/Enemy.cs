@@ -6,6 +6,18 @@ using UnityEngine;
 // All enemies: patrol between two points, collides with player for an effect
 public abstract class Enemy : MonoBehaviour
 {
+    // For accessing base coroutine script
+    [SerializeField] protected GameObject coControl;
+    protected CoroutineController coControlScript;
+
+    // For giving coroutinecontroller the gameobject transform info.
+    private GameObject _enemyObj;
+    public GameObject enemyObj
+    {
+        get { return _enemyObj; }
+        protected set { _enemyObj = value; }
+    }
+
     // Start of enemy movement variables.
     [SerializeField] protected float enemyMoveTime = 4f;
 
@@ -24,6 +36,10 @@ public abstract class Enemy : MonoBehaviour
             else { Debug.LogError(gameObject.name + ": invalid delay time"); }
         }
     }
+
+    // For enemies that might pause between movements (similar to pickups)
+    private bool pause = false;
+    private float pauseTime = 0f;
 
     // Vectors for enemies to move between, can be set in 3D space via editor.
     [SerializeField] protected GameObject pointA;
@@ -45,65 +61,20 @@ public abstract class Enemy : MonoBehaviour
     protected Vector3 m_validDirection;
     public abstract Vector3 validDirection { get; protected set; }
 
-    // for accessing player script (may be used for enemies that chase)
-    //protected GameObject playerObject;
-    //protected PlayerController playerController;
-
     protected virtual void Start()
     {
-        //PlayerSet();
-        StartCoroutine(MoveTimer());
+        SetPatrolPath();
+        StartCoroutine(coControlScript.MoveTimer(enemyObj, hasDelay, delayTime, pause, pauseTime, doesRotate, patrolRotate, patrolA, patrolB, enemyMoveTime));
     }
 
     // Sets the patrol points then deactivates the empty gameobjects
     protected void SetPatrolPath()
     {
+        coControl = GameObject.Find("CoroutineController");
+        coControlScript = coControl.gameObject.GetComponent<CoroutineController>();
         patrolA = pointA.transform.position;
         patrolB = pointB.transform.position;
         pointA.SetActive(false);
         pointB.SetActive(false);
-    }
-
-    //protected void PlayerSet()
-    //{
-    //    playerObject = GameObject.Find("Player");
-    //    playerController = playerObject.GetComponent<PlayerController>();
-    //}
-
-    // Similar coroutine as the pickup animation, could possibly be merged into a single class that handles moving obstacles/enemies?
-    // if(doesRotate) exists for patrolling enemies that turn around, like the knife.
-    protected IEnumerator MoveTimer()
-    {
-        SetPatrolPath();
-        if (hasDelay == true)
-        {
-            yield return new WaitForSeconds(_delayTime);
-        }
-
-        while (true)
-        {
-            if (doesRotate)
-            {
-                gameObject.transform.Rotate(patrolRotate);
-            }
-            yield return StartCoroutine(MoveEnemy(transform, patrolA, patrolB, enemyMoveTime));
-            if (doesRotate)
-            {
-                gameObject.transform.Rotate(patrolRotate);
-            }
-            yield return StartCoroutine(MoveEnemy(transform, patrolB, patrolA, enemyMoveTime));
-        }
-    }
-
-    protected IEnumerator MoveEnemy(Transform thisTransform, Vector3 startPos, Vector3 endPos, float time)
-    {
-        var i = 0.0f;
-        var rate = 1.0f / time;
-        while (i < 1.0f)
-        {
-            i += Time.deltaTime * rate;
-            thisTransform.position = Vector3.Lerp(startPos, endPos, i);
-            yield return null;
-        }
     }
 }

@@ -4,23 +4,18 @@ using UnityEngine;
 
 public class EnergyDrink : Pickup
 {
-
-
-    private void Start()
+    protected override void Start()
     {
-        StartCoroutine(MoveTimer());
+        pickUp = gameObject;
+        base.Start();
     }
 
-    private void Update()
-    {
-        PickupRotation();
-    }
 
     protected override void PowerUp()
     {
         playerController = player.GetComponent<PlayerController>();
 
-        if(playerController.playerLivesRemain < playerController.playerLifeMax)
+        if (playerController.playerLivesRemain < playerController.playerLifeMax)
         {
             playerController.playerLivesRemain++;
             gameObject.SetActive(false);

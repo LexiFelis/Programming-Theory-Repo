@@ -10,11 +10,10 @@ public class CollisionDetection : MonoBehaviour
     public MainController mainController;
 
     public Enemy enemyScript;
-   
 
     private void Awake()
     {
-         playerController = GetComponent<PlayerController>();
+        playerController = GetComponent<PlayerController>();
     }
 
     // Colliders are here, see below for triggers
@@ -25,7 +24,7 @@ public class CollisionDetection : MonoBehaviour
         if (other.gameObject.tag == "hazard")
         {
             if (!playerController.hitCooldown)
-            {                
+            {
                 playerController.HazardCollide();
             }
         }
@@ -37,7 +36,7 @@ public class CollisionDetection : MonoBehaviour
         if (other.gameObject.tag == "enemy")
         {
             enemyScript = other.gameObject.GetComponent<Enemy>();
-            DirectionalHit(other);   
+            DirectionalHit(other);
         }
     }
 
@@ -92,7 +91,7 @@ public class CollisionDetection : MonoBehaviour
             }
         }
     }
-    
+
     // Script for hitting anywhere other than danger zone
     private void BodyHit(Collision col, bool dInvert, bool cDie)
     {
