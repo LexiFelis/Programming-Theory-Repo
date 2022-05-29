@@ -16,10 +16,11 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody playerRb;
 
-    public MainController mainController;
+    private GameObject mainControl;
+    private MainController mainController;
 
     // Damage cooldown and animation
-    public Renderer rend;
+    private Renderer rend;
     public bool grounded;
     public bool hitCooldown;
     public static bool isPlaying;
@@ -29,6 +30,13 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        PlayerInitialize();
+    }
+
+    void PlayerInitialize()
+    {
+        mainControl = GameObject.Find("MainController");
+        mainController = mainControl.GetComponent<MainController>();
         playerLifeMax = 3;
         playerLivesRemain = playerLifeMax;
         playerRb = GetComponent<Rigidbody>();
@@ -38,7 +46,7 @@ public class PlayerController : MonoBehaviour
         isPlaying = true;
         hitCooldown = false;
         invAura.SetActive(false);
-       }
+    }
 
     void Update()
     {
