@@ -42,7 +42,7 @@ public class CoroutineController : MonoBehaviour
     }
 
 
-    protected IEnumerator MoveObject(Transform thisTransform, Vector3 startPos, Vector3 endPos, float time)
+    private IEnumerator MoveObject(Transform thisTransform, Vector3 startPos, Vector3 endPos, float time)
     {
         var i = 0.0f;
         var rate = 1.0f / time;

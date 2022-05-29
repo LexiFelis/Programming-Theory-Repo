@@ -7,16 +7,17 @@ using TMPro;
 // This will control the gameplay, win/lose states on main scene
 public class MainController : MonoBehaviour
 {
-    [SerializeField] public GameObject playerChar;
-    public PlayerController playerController;
+    private GameObject playerChar;
+    private PlayerController playerController;
 
-    public GameObject gameOverDisplay;
-    public GameObject gameWinDisplay;
+    [SerializeField] private GameObject gameOverDisplay;
+    [SerializeField] private GameObject gameWinDisplay;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerChar = GetComponent<GameObject>();
+        playerChar = GameObject.Find("Player");
+        playerController = playerChar.gameObject.GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
