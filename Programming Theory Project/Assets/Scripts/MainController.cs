@@ -9,15 +9,16 @@ public class MainController : MonoBehaviour
 {
     private GameObject playerChar;
     private PlayerController playerController;
+    [SerializeField] private GameObject uiController;
+    private MainUIController mainUIController;
 
-    [SerializeField] private GameObject gameOverDisplay;
-    [SerializeField] private GameObject gameWinDisplay;
 
     // Start is called before the first frame update
     void Start()
     {
         playerChar = GameObject.Find("Player");
         playerController = playerChar.gameObject.GetComponent<PlayerController>();
+        mainUIController = uiController.gameObject.GetComponent<MainUIController>();
     }
 
     // Update is called once per frame
@@ -45,7 +46,7 @@ public class MainController : MonoBehaviour
 
     public void ResetGame()
     {
-        Scene scene = SceneManager.GetActiveScene(); 
+        Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
     }
 
@@ -54,7 +55,7 @@ public class MainController : MonoBehaviour
         if (PlayerController.isPlaying)
         {
             PlayerController.isPlaying = false;
-            gameWinDisplay.SetActive(true);
+            mainUIController.GameWinDisplay();
         }
     }
 
@@ -63,7 +64,7 @@ public class MainController : MonoBehaviour
         if (PlayerController.isPlaying)
         {
             PlayerController.isPlaying = false;
-            gameOverDisplay.SetActive(true);
+            mainUIController.GameOverDisplay();
         }
     }
 }
