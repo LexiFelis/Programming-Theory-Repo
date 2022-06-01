@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Steak : Pickup
+public class Steak : Pickup // INHERITENCE
 {
     [SerializeField] float invincibilityTime;
 
@@ -12,7 +12,7 @@ public class Steak : Pickup
         base.Start();
     }
 
-    protected override void PowerUp()
+    protected override void PowerUp() // POLYMORPHISM
     {
         playerController = player.GetComponent<PlayerController>();
 

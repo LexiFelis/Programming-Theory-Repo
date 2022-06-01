@@ -5,11 +5,11 @@ using UnityEngine;
 // For controlling the player character and tracking lives.
 public class PlayerController : MonoBehaviour
 {
-    public int playerLifeMax { get; private set; }
+    public int playerLifeMax { get; private set; } // ENCAPSULATION
 
     public int playerLivesRemain;
 
-    private float runSpeed = 20;
+    private float runSpeed = 30;
     private float jumpForce = 100;
     private int goForward = 1;
     private int cooldownTime = 3;
@@ -29,8 +29,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject invAura;
 
     void Start()
-    {
-        PlayerInitialize();
+    { 
+        PlayerInitialize(); // ABSTRACTION
     }
 
     void PlayerInitialize()
@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isPlaying)
         {
-            PlayerControls();
+            PlayerControls(); // ABSTRACTION
         }
     }
 
@@ -60,15 +60,15 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.D))
         {
-            PlayerRun(goForward);
+            PlayerRun(goForward); // ABSTRACTION
         }
         if (Input.GetKey(KeyCode.A))
         {
-            PlayerRun(-goForward);
+            PlayerRun(-goForward); // ABSTRACTION
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            PlayerJump();
+            PlayerJump(); // ABSTRACTION
         }
     }
 
@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!hitCooldown)
         {
-            PlayerDamage();
+            PlayerDamage(); // ABSTRACTION
             playerRb.AddForce(Vector3.up * 5, ForceMode.Impulse);
             StartCoroutine(HitCooldown(cooldownTime));
         }

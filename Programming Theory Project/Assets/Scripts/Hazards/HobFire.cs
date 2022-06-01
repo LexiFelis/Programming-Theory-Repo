@@ -14,9 +14,14 @@ public class HobFire : MonoBehaviour
 
     private void Start()
     {
+        HobInitialise(); // ABSTRACTION
+        StartCoroutine(HobCycle());
+    }
+
+    private void HobInitialise()
+    {
         hitBox = transform.GetChild(0).gameObject;
         childrenParticle = gameObject.GetComponentsInChildren<ParticleSystem>();
-        StartCoroutine(HobCycle());
     }
 
     private IEnumerator HobCycle()
@@ -25,11 +30,11 @@ public class HobFire : MonoBehaviour
         {
             // hitbox and particle emmissions are enabled/disabled in sync
             hitBox.SetActive(true);
-            ParticleSwitch(true);
+            ParticleSwitch(true); // ABSTRACTION
             yield return new WaitForSeconds(activeTime);
 
             hitBox.SetActive(false);
-            ParticleSwitch(false);
+            ParticleSwitch(false); // ABSTRACTION
             yield return new WaitForSeconds(offTime);
         }
     }

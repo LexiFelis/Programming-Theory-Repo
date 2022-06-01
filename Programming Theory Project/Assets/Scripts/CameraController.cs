@@ -12,11 +12,21 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        TrackingInitialise(); // ABSTRACTION
+    }
+
+    private void TrackingInitialise()
+    {
         playerChar = GameObject.Find("Player");
         playerPos = playerChar.transform.position;
     }
 
     private void LateUpdate()
+    {
+        CameraTracking(); // ABSTRACTION
+    }
+
+    private void CameraTracking()
     {
         playerPos = playerChar.transform.position;
         cameraPos = new Vector3(playerPos.x + 22.5f, playerPos.y, playerPos.z);

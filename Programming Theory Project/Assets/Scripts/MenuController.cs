@@ -18,7 +18,7 @@ public class MenuController : MonoBehaviour
     private void Start()
     {
         _nameInput = GameObject.Find("NameInput (TMP)").GetComponent<TMP_InputField>(); // This is the input field
-        CurrentPlayer();
+        CurrentPlayer(); // ABSTRACTION
     }
 
     public void StartGame()
