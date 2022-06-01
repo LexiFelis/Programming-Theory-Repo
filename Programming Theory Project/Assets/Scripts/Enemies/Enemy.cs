@@ -16,7 +16,7 @@ public abstract class Enemy : MonoBehaviour
     {
         get { return _enemyObj; }
         protected set { _enemyObj = value; }
-    }
+    }// ENCAPSULATION
 
     // Start of enemy movement variables.
     [SerializeField] protected float enemyMoveTime = 4f;
@@ -24,6 +24,7 @@ public abstract class Enemy : MonoBehaviour
     // For enemies that have initial delay
     protected bool hasDelay = false;
     private float _delayTime = 0;
+    // Ensures that the delay time is always below the total patrol time
     protected float delayTime
     {
         get => _delayTime;
@@ -35,7 +36,7 @@ public abstract class Enemy : MonoBehaviour
             }
             else { Debug.LogError(gameObject.name + ": invalid delay time"); }
         }
-    }
+    } // ENCAPSULATION
 
     // For enemies that might pause between movements (similar to pickups)
     private bool pause = false;
@@ -51,7 +52,7 @@ public abstract class Enemy : MonoBehaviour
     protected bool doesRotate;
     protected Vector3 patrolRotate;
 
-    // for directional collision detection, mandatory for all children
+    // for directional collision detection, mandatory for all children // INHERITENCE
     protected bool m_canDie;
     public abstract bool canDie { get; protected set; }
     protected bool m_directionInverse;
@@ -63,7 +64,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
-        SetPatrolPath();
+        SetPatrolPath();// ABSTRACTION
         StartCoroutine(coControlScript.MoveTimer(enemyObj, hasDelay, delayTime, pause, pauseTime, doesRotate, patrolRotate, patrolA, patrolB, enemyMoveTime));
     }
 

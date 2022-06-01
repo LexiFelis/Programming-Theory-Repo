@@ -6,39 +6,39 @@ using UnityEngine;
 // Inhereted: Patrols, hurts player
 // polymorphism: rotates to face direction of movement, directional collision detection
 
-public class Knife : Enemy
+public class Knife : Enemy // INHERITENCE
 {
     public override bool canDie
     {
         get { return m_canDie; }
         protected set { m_canDie = value; }
-    }
+    } // ENCAPSULATION
 
     public override bool directionInverse
     {
         get { return m_directionInverse; }
         protected set { m_directionInverse = value; }
-    }
+    } // INHERITENCE // POLYMORPHISM
 
     public override float contactThreshold
     {
         get { return m_contactThreshold; }
         protected set { m_contactThreshold = value; }
-    }
+    } // INHERITENCE // POLYMORPHISM
 
     public override Vector3 validDirection
     {
         get { return m_validDirection; }
         protected set { m_validDirection = value; }
-    }
+    } // INHERITENCE // POLYMORPHISM
 
-    protected override void Start()
+    protected override void Start() // INHERITENCE
     {
-        InitialiseKnife();
-        base.Start();
+        InitialiseKnife(); // ABSTRACTION
+        base.Start(); // INHERITENCE
     }
 
-    private void InitialiseKnife()
+    private void InitialiseKnife() // POLYMORPHISM
     {
         enemyObj = gameObject;
         canDie = true;

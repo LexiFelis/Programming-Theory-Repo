@@ -16,6 +16,11 @@ public class MainController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MainInitialise(); // ABSTRACTION
+    }
+
+    private void MainInitialise()
+    {
         playerChar = GameObject.Find("Player");
         playerController = playerChar.gameObject.GetComponent<PlayerController>();
         mainUIController = uiController.gameObject.GetComponent<MainUIController>();
@@ -24,18 +29,18 @@ public class MainController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UIControls();
+        UIControls(); // ABSTRACTION
     }
 
     private void UIControls()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            ResetGame();
+            ResetGame(); // ABSTRACTION
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            LoadMenu();
+            LoadMenu(); // ABSTRACTION
         }
     }
 

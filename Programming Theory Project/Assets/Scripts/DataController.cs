@@ -15,11 +15,17 @@ public class DataController : MonoBehaviour
     {
         get { return _playerName; }
         private set { _playerName = value; }
-    }
+    } // ENCAPSULATION
 
-    // Singleton script, ensures only one instance of this exists at a time.
     void Awake()
     {
+        DataSingleton(); // ABSTRACTION
+    }
+
+    private void DataSingleton()
+    {
+        // Singleton script, ensures only one instance of this exists at a time.
+
         if (instance != null)
         {
             Destroy(gameObject);

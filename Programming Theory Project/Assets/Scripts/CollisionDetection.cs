@@ -36,7 +36,7 @@ public class CollisionDetection : MonoBehaviour
         if (other.gameObject.tag == "enemy")
         {
             enemyScript = other.gameObject.GetComponent<Enemy>();
-            DirectionalHit(other);
+            DirectionalHit(other); // ABSTRACTION
         }
     }
 
@@ -66,12 +66,12 @@ public class CollisionDetection : MonoBehaviour
             // if player hits danger zone
             if (Vector3.Angle(col.contacts[k].normal, enemyScript.validDirection) <= enemyScript.contactThreshold)
             {
-                DangerZoneHit(col, enemyScript.directionInverse, enemyScript.canDie);
+                DangerZoneHit(col, enemyScript.directionInverse, enemyScript.canDie); // ABSTRACTION
             }
             // if player hits anywhere else
             else
             {
-                BodyHit(col, enemyScript.directionInverse, enemyScript.canDie);
+                BodyHit(col, enemyScript.directionInverse, enemyScript.canDie); // ABSTRACTION
             }
         }
     }

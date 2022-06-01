@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnergyDrink : Pickup
+public class EnergyDrink : Pickup // INHERITENCE
 {
     protected override void Start()
     {
@@ -11,7 +11,7 @@ public class EnergyDrink : Pickup
     }
 
 
-    protected override void PowerUp()
+    protected override void PowerUp() // POLYMORPHISM
     {
         playerController = player.GetComponent<PlayerController>();
 

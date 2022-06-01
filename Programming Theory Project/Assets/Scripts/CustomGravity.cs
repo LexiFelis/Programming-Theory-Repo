@@ -14,12 +14,22 @@ public class CustomGravity : MonoBehaviour
 
     private void OnEnable()
     {
+        GravityInitialise(); // ABSTRACTION
+    }
+
+    private void GravityInitialise()
+    {
         // Gets RB component upon loading object and turns off 
         m_rb = GetComponent<Rigidbody>();
         m_rb.useGravity = false;
     }
 
     void FixedUpdate()
+    {
+        GravityForce(); // ABSTRACTION
+    }
+
+    private void GravityForce()
     {
         Vector3 gravity = globalGravity * gravityScale * Vector3.up;
         m_rb.AddForce(gravity, ForceMode.Acceleration);

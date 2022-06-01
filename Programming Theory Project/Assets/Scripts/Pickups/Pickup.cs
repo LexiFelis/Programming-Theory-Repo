@@ -14,7 +14,7 @@ public abstract class Pickup : MonoBehaviour
     {
         get { return _pickUp; }
         protected set { _pickUp = value; }
-    }
+    } // ENCAPSULATION
 
     // For accessing base coroutine script
     [SerializeField] protected GameObject coControl;
@@ -40,7 +40,7 @@ public abstract class Pickup : MonoBehaviour
 
     protected virtual void Start()
     {
-        InitialiseRoute();
+        InitialiseRoute(); // ABSTRACTION
         StartCoroutine(coControlScript.MoveTimer(pickUp, delay, delayTime, doesFloat, floatPauseTime, doesRotate, rotateBlank, pickupStartPos, pickupEndPos, floatTime));
     }
 
@@ -56,7 +56,7 @@ public abstract class Pickup : MonoBehaviour
     // Slowly rotates the pickup
     protected virtual void Update()
     {
-        PickupRotation();
+        PickupRotation(); // ABSTRACTION
     }
 
     protected virtual void PickupRotation()
@@ -72,7 +72,7 @@ public abstract class Pickup : MonoBehaviour
         if (other.gameObject.name == "Player")
         {
             player = other.gameObject;
-            PowerUp();
+            PowerUp(); // INHERITENCE
         }
     }
 }

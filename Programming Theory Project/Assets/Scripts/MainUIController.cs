@@ -17,6 +17,11 @@ public class MainUIController : MonoBehaviour
 
     private void Start()
     {
+        UIInitialise(); // ABSTRACTION
+    }
+
+    private void UIInitialise()
+    {
         gameOverDisplay.SetActive(false);
         gameWinDisplay.SetActive(false);
         playerController = player.GetComponent<PlayerController>();
@@ -24,6 +29,7 @@ public class MainUIController : MonoBehaviour
 
     private void Update()
     {
+        // Updates the life display. Not sure if worth abstracting.
         livesDisplay.text = "Lives: " + playerController.playerLivesRemain;
     }
 
